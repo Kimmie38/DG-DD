@@ -17,6 +17,7 @@ export type Photo = {
 export type SectionId =
   | "home-hero"
   | "about-portrait"
+  | "dbi-impact"
   | "dbi-itu-visit"
   | "dbi-itu-cisco"
   | "dbi-delegation"
