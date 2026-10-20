@@ -43,6 +43,8 @@
 }
 
 html {
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + 16px);
   -webkit-text-size-adjust: 100%;
@@ -56,7 +58,27 @@ body {
   font-size: 17px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Never let a section push the page wider than the screen. */
+main,
+.site-header,
+.site-footer,
+.section,
+.feature,
+.book {
+  overflow-x: clip;
+  max-width: 100%;
+}
+img,
+video,
+iframe,
+svg {
+  max-width: 100%;
 }
 
 h1,
@@ -648,7 +670,7 @@ button {
   max-width: none;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: end;
   justify-content: space-between;
   gap: 20px;
 }
@@ -2089,18 +2111,45 @@ button {
 .anim-ready [data-reveal="zoom"]:not(.is-visible) {
   transform: scale(0.9);
 }
+/* On phones, slide everything up instead of sideways so nothing pokes past the screen edge. */
+@media (max-width: 860px) {
+  .anim-ready [data-reveal="slide-left"]:not(.is-visible),
+  .anim-ready [data-reveal="slide-right"]:not(.is-visible) {
+    transform: translateY(40px);
+  }
+  .hero__media {
+    animation-name: rise-in;
+  }
+  .book__cover {
+    animation-name: rise-in;
+  }
+}
 
 /* Sliding photo marquee */
+.marquee-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  contain: paint;
+}
 .marquee {
+  --row-h: 220px;
   display: grid;
   gap: 14px;
+  width: 100%;
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
+.marquee__row {
+  overflow: hidden;
+  width: 100%;
+}
 .marquee__track {
   display: flex;
   width: max-content;
+  will-change: transform;
   animation: marquee 60s linear infinite;
 }
 .marquee__row--reverse .marquee__track {
@@ -2119,13 +2168,20 @@ button {
 .marquee__item {
   flex: none;
   position: relative;
+  height: var(--row-h);
+  width: calc(var(--row-h) * var(--ratio, 1.33));
 }
 .marquee__btn {
   height: 100%;
 }
 @media (max-width: 600px) {
-  .marquee__item {
-    zoom: 0.7;
+  .marquee {
+    --row-h: 150px;
+    gap: 10px;
+  }
+  .marquee__set {
+    gap: 10px;
+    padding-right: 10px;
   }
 }
 
